@@ -7,3 +7,6 @@ hdfs dfs -put data
 
 # Run application
 hadoop jar Lab1-1.0.0.jar it.polito.bigdata.hadoop.DriverBigData 2 data results
+
+# Retrieve result
+hadoop dfs -getmerge results result.txt
