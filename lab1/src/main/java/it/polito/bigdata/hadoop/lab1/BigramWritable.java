@@ -10,10 +10,10 @@ import org.apache.hadoop.io.WritableComparable;
 public class BigramWritable implements WritableComparable<BigramWritable> {
 	private String first, second;
 	private static String regexAlpha = "[a-z0-9]+";
-	
+
 	// For deserialization
 	public BigramWritable() {}
-	
+
 	public BigramWritable(String first, String second) {
 		this.first = first;
 		this.second = second;
@@ -32,11 +32,11 @@ public class BigramWritable implements WritableComparable<BigramWritable> {
 		first = in.readUTF();
 		second = in.readUTF();
 	}
-	
+
 	// For output on text files
 	@Override
 	public String toString() {
-		return "(" + first.toString() + "," + second.toString() + ")";
+		return first.toString() + " " + second.toString();
 	}
 
 	// For shuffle and sort phase
@@ -47,13 +47,13 @@ public class BigramWritable implements WritableComparable<BigramWritable> {
 			result = second.compareTo(o.second);
 		return result;
 	}
-	
+
 	// For key partitioning
 	@Override
 	public int hashCode() {
 		return Objects.hash(first, second);
 	}
-	
+
 	public boolean isAlphanumeric() {
 		return first.matches(regexAlpha) && second.matches(regexAlpha);
 	}

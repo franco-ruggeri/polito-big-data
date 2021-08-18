@@ -24,7 +24,7 @@ public class DriverBigData extends Configured implements Tool {
 		Path outputDir;
 		int numberOfReducers;
 		int exitCode;  
-		boolean bigrams;
+		boolean bigram;
 		
 		// Parse the parameters
 		numberOfReducers = Integer.parseInt(args[0]);	// Number of instances of the reducer class 
@@ -32,10 +32,10 @@ public class DriverBigData extends Configured implements Tool {
 		outputDir = new Path(args[2]);					// Output folder
 		switch (args[3]) {
 		case "bigram":
-			bigrams = true;
+			bigram = true;
 			break;
 		case "word":
-			bigrams = false;
+			bigram = false;
 			break;
 		default:
 			throw new IllegalArgumentException("Invalid mode: " + args[3]);
@@ -48,7 +48,7 @@ public class DriverBigData extends Configured implements Tool {
 		Job job = Job.getInstance(conf); 
 
 		// Assign a name to the job
-		job.setJobName("Basic MapReduce Project - WordCount example");
+		job.setJobName("Lab 1 - WordCount");
 
 		// Set path of the input file/folder (if it is a folder, the job reads all the files in the specified folder) for this job
 		FileInputFormat.addInputPath(job, inputPath);
@@ -66,7 +66,7 @@ public class DriverBigData extends Configured implements Tool {
 		job.setOutputFormatClass(TextOutputFormat.class);
 
 		// Set mapper and reducer
-		if (!bigrams) {
+		if (!bigram) {
 			job.setMapperClass(MapperBigDataWord.class);
 			job.setMapOutputKeyClass(Text.class);
 			job.setOutputKeyClass(Text.class);

@@ -9,7 +9,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 /**
  * Basic MapReduce Project - Reducer
  */
-class ReducerBigData<T extends WritableComparable<? extends T>> extends Reducer<T,IntWritable,T,IntWritable> {
+class ReducerBigData<T extends WritableComparable<?>> extends Reducer<T,IntWritable,T,IntWritable> {
 	
 	@Override
 	protected void reduce(T key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {

@@ -14,7 +14,7 @@
 	<artifactId>Lab1</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
-	<name>"Hadoop - Lab1"</name>
+	<name>Lab 1 - WordCount with Hadoop</name>
 
 	<repositories>
 		<repository>
