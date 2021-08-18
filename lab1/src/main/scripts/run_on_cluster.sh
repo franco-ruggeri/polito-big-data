@@ -1,3 +1,8 @@
+if [ $# -ne 1 ]; then
+	echo "Usage: $0 word|bigram"
+	exit 1
+fi
+
 # Remove folders of the previous run
 hdfs dfs -rm -r data
 hdfs dfs -rm -r results
@@ -6,7 +11,7 @@ hdfs dfs -rm -r results
 hdfs dfs -put data
 
 # Run application
-hadoop jar Lab1-1.0.0.jar it.polito.bigdata.hadoop.DriverBigData 2 data results
+hadoop jar Lab1-1.0.0.jar it.polito.bigdata.hadoop.lab1.DriverBigData 2 data results $@
 
 # Retrieve result
 hadoop dfs -getmerge results result.txt

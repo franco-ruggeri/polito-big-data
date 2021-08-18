@@ -3,23 +3,16 @@ package it.polito.bigdata.hadoop.lab1;
 import java.io.IOException;
 
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 /**
  * Basic MapReduce Project - Reducer
  */
-class ReducerBigData extends Reducer<
-                Text,           // Input key type
-                IntWritable,    // Input value type
-                Text,           // Output key type
-                IntWritable> {  // Output value type
-    
+class ReducerBigData<T extends WritableComparable<? extends T>> extends Reducer<T,IntWritable,T,IntWritable> {
+	
 	@Override
-	protected void reduce(
-			Text key, // Input key type
-			Iterable<IntWritable> values, // Input value type
-			Context context) throws IOException, InterruptedException {
+	protected void reduce(T key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
 		int occurrences = 0;
 
 		// Iterate over the set of values and sum them 
