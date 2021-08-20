@@ -14,7 +14,7 @@
 	<artifactId>Lab3</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
-	<name>"Hadoop - Lab3"</name>
+	<name>Lab 3 - Frequently bought or reviewed together with Hadoop MapReduce</name>
 
 	<repositories>
 		<repository>
