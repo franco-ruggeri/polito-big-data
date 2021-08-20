@@ -34,6 +34,8 @@ class ReducerTopK extends Reducer<NullWritable,RecordCountWritable,NullWritable,
     		 * This is needed because the Iterable in Hadoop loads the values always in the same object.
     		 * So, if we don't copy the object at each iteration, we would store in the top K vector references to the same object.
     		 * After the loop, such an object contains the last value, so the top K would contain many references to the last value.
+    		 * 
+    		 * You can check with the debugger.
     		 */
     		RecordCountWritable vCopy = new RecordCountWritable(v);
     		topK.update(vCopy);

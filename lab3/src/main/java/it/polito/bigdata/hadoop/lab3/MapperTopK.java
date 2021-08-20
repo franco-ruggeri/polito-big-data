@@ -2,7 +2,6 @@ package it.polito.bigdata.hadoop.lab3;
 
 import java.io.IOException;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -10,19 +9,10 @@ import org.apache.hadoop.mapreduce.Mapper;
 /**
  * MapReduce - Mapper
  * 
- * Implementation of the top K pattern.
+ * Transparent mapper. Since the computation of the local top K pairs is anticipated in the reducers of the first job,
+ * this Mapper need just to output the the key-value pairs as they are.
  */
 class MapperTopK extends Mapper<Text,Text,NullWritable,RecordCountWritable> {
-	private TopKVector<RecordCountWritable> topK;
-	
-	@Override
-	protected void setup(Context context)
-			throws IOException, InterruptedException {
-		super.setup(context);
-		Configuration config = context.getConfiguration();
-		int k = config.getInt("k", 0);
-		topK = new TopKVector<>(k);
-	}
 	
 	@Override
 	protected void map(Text key, Text value, Context context) 
@@ -30,14 +20,6 @@ class MapperTopK extends Mapper<Text,Text,NullWritable,RecordCountWritable> {
 		String record = key.toString();
 		int count = Integer.parseInt(value.toString());
 		RecordCountWritable recordCount = new RecordCountWritable(record, count);
-		topK.update(recordCount);
-	}
-	
-	@Override
-	protected void cleanup(Context context)
-			throws IOException, InterruptedException {
-		super.cleanup(context);
-		for (RecordCountWritable e : topK.getTopK())
-			context.write(NullWritable.get(), e);
+		context.write(NullWritable.get(), recordCount);
 	}
 }

@@ -30,15 +30,16 @@ public class DriverBigData extends Configured implements Tool {
 		int exitCode, numberOfReducers, k;
 		Configuration conf;
 		Job job;
-		Path inputPath, outputDirCount, outputDirTopK;
-		
-		conf = this.getConf();
+		Path inputPath, outputDirLocalTopK, outputDirTopK;
 		
 		numberOfReducers = Integer.parseInt(args[0]);
 		inputPath = new Path(args[1]);
-		outputDirCount = new Path(args[2]);
+		outputDirLocalTopK = new Path(args[2]);
 		outputDirTopK = new Path(args[3]);
 		k = Integer.parseInt(args[4]);
+		
+		conf = this.getConf();
+		conf.setInt("k", k);
 		
 		/* Job 1 - Pair count */
 		job = Job.getInstance(conf);
@@ -53,15 +54,13 @@ public class DriverBigData extends Configured implements Tool {
 		job.setMapOutputValueClass(IntWritable.class);
 
 		job.setReducerClass(ReducerPairCount.class);
-		job.setOutputKeyClass(PairWritable.class);
-		job.setOutputValueClass(IntWritable.class);
-		
-		job.setCombinerClass(ReducerPairCount.class);
+		job.setOutputKeyClass(NullWritable.class);
+		job.setOutputValueClass(RecordCountWritable.class);
 		
 		job.setNumReduceTasks(numberOfReducers);
 		
 		FileInputFormat.addInputPath(job, inputPath);
-		FileOutputFormat.setOutputPath(job, outputDirCount);
+		FileOutputFormat.setOutputPath(job, outputDirLocalTopK);
 		
 		exitCode = job.waitForCompletion(true) ? 0 : 1;
 		if (exitCode != 0) 
@@ -69,8 +68,6 @@ public class DriverBigData extends Configured implements Tool {
 		/* End Job 1 */
 		
 		/* Job 2 - Top K */
-		conf.setInt("k", k);
-		
 		job = Job.getInstance(conf);
 		job.setJobName("Lab 3 - Top K");
 		job.setJarByClass(DriverBigData.class);
@@ -88,7 +85,7 @@ public class DriverBigData extends Configured implements Tool {
 		
 		job.setNumReduceTasks(1);	// global view
 		
-		FileInputFormat.addInputPath(job, outputDirCount);
+		FileInputFormat.addInputPath(job, outputDirLocalTopK);
 		FileOutputFormat.setOutputPath(job, outputDirTopK);
 		
 		exitCode = job.waitForCompletion(true) ? 0 : 1;
