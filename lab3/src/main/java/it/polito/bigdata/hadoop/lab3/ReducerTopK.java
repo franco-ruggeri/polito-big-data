@@ -35,7 +35,8 @@ class ReducerTopK extends Reducer<NullWritable,RecordCountWritable,NullWritable,
     		 * So, if we don't copy the object at each iteration, we would store in the top K vector references to the same object.
     		 * After the loop, such an object contains the last value, so the top K would contain many references to the last value.
     		 * 
-    		 * You can check with the debugger.
+    		 * See https://cornercases.wordpress.com/2011/08/18/hadoop-object-reuse-pitfall-all-my-reducer-values-are-the-same/.
+    		 * You can also check with the debugger.
     		 */
     		RecordCountWritable vCopy = new RecordCountWritable(v);
     		topK.update(vCopy);
