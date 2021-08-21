@@ -29,6 +29,10 @@ public class AverageWritable implements Writable {
 		return count;
 	}
 	
+	public double getAverage() {
+		return sum / count;
+	}
+	
 	@Override
 	public void write(DataOutput out) throws IOException {
 		out.writeDouble(sum);
@@ -43,6 +47,6 @@ public class AverageWritable implements Writable {
 	
 	@Override
 	public String toString() {
-		return "" + (sum / count);
+		return "" + getAverage();
 	}
 }
