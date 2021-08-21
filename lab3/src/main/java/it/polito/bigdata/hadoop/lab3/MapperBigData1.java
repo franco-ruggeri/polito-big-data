@@ -8,11 +8,11 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 /**
- * MapReduce - Mapper
+ * MapReduce - Mapper of Job 1
  * 
  * Implementation of the numerical summarization pattern.
  */
-class MapperPairCount extends Mapper<LongWritable,Text,PairWritable,IntWritable> {
+class MapperBigData1 extends Mapper<LongWritable,Text,PairWritable,IntWritable> {
 
 	@Override
 	protected void map(LongWritable key, Text value, Context context) 

@@ -15,8 +15,8 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import it.polito.bigdata.hadoop.lab3.DriverBigData;
-import it.polito.bigdata.hadoop.lab3.MapperTopK;
-import it.polito.bigdata.hadoop.lab3.ReducerTopK;
+import it.polito.bigdata.hadoop.lab3.MapperBigData2;
+import it.polito.bigdata.hadoop.lab3.ReducerBigData2;
 
 /**
  * MapReduce - Driver
@@ -27,15 +27,15 @@ public class DriverBigData extends Configured implements Tool {
 
 	@Override
 	public int run(String[] args) throws Exception {
-		int exitCode, numberOfReducers, k;
+		int exitCode, numberOfReducers1, k;
 		Configuration conf;
 		Job job;
-		Path inputPath, outputDirLocalTopK, outputDirTopK;
+		Path inputPath, outputDir1, outputDir2;
 		
-		numberOfReducers = Integer.parseInt(args[0]);
+		numberOfReducers1 = Integer.parseInt(args[0]);
 		inputPath = new Path(args[1]);
-		outputDirLocalTopK = new Path(args[2]);
-		outputDirTopK = new Path(args[3]);
+		outputDir1 = new Path(args[2]);
+		outputDir2 = new Path(args[3]);
 		k = Integer.parseInt(args[4]);
 		
 		conf = this.getConf();
@@ -49,18 +49,18 @@ public class DriverBigData extends Configured implements Tool {
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 
-		job.setMapperClass(MapperPairCount.class);
+		job.setMapperClass(MapperBigData1.class);
 		job.setMapOutputKeyClass(PairWritable.class);
 		job.setMapOutputValueClass(IntWritable.class);
 
-		job.setReducerClass(ReducerPairCount.class);
+		job.setReducerClass(ReducerBigData1.class);
 		job.setOutputKeyClass(NullWritable.class);
 		job.setOutputValueClass(RecordCountWritable.class);
 		
-		job.setNumReduceTasks(numberOfReducers);
+		job.setNumReduceTasks(numberOfReducers1);
 		
 		FileInputFormat.addInputPath(job, inputPath);
-		FileOutputFormat.setOutputPath(job, outputDirLocalTopK);
+		FileOutputFormat.setOutputPath(job, outputDir1);
 		
 		exitCode = job.waitForCompletion(true) ? 0 : 1;
 		if (exitCode != 0) 
@@ -75,18 +75,18 @@ public class DriverBigData extends Configured implements Tool {
 		job.setInputFormatClass(KeyValueTextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 
-		job.setMapperClass(MapperTopK.class);
+		job.setMapperClass(MapperBigData2.class);
 		job.setMapOutputKeyClass(NullWritable.class);
 		job.setMapOutputValueClass(RecordCountWritable.class);
 
-		job.setReducerClass(ReducerTopK.class);
+		job.setReducerClass(ReducerBigData2.class);
 		job.setOutputKeyClass(NullWritable.class);
 		job.setOutputValueClass(RecordCountWritable.class);
 		
 		job.setNumReduceTasks(1);	// global view
 		
-		FileInputFormat.addInputPath(job, outputDirLocalTopK);
-		FileOutputFormat.setOutputPath(job, outputDirTopK);
+		FileInputFormat.addInputPath(job, outputDir1);
+		FileOutputFormat.setOutputPath(job, outputDir2);
 		
 		exitCode = job.waitForCompletion(true) ? 0 : 1;
 		/* End Job 2 */

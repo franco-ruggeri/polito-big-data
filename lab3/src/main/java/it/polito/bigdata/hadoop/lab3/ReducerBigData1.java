@@ -8,13 +8,13 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 /**
- * MapReduce - Reducer
+ * MapReduce - Reducer of Job 1
  * 
  * Starting from the numerical summarization pattern, but exploiting the knowledge of the overall goal,
  * the top K operation is anticipated here to output only the local top K pairs instead of all. 
  * This is an optimization because the reducers emit less key-value pairs.
  */
-class ReducerPairCount extends Reducer<PairWritable,IntWritable,NullWritable,RecordCountWritable> {
+class ReducerBigData1 extends Reducer<PairWritable,IntWritable,NullWritable,RecordCountWritable> {
 	private TopKVector<RecordCountWritable> localTopK;
 	
 	@Override

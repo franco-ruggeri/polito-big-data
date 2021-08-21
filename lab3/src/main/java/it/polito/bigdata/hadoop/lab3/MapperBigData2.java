@@ -7,12 +7,12 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 /**
- * MapReduce - Mapper
+ * MapReduce - Mapper of Job 2
  * 
  * Transparent mapper. Since the computation of the local top K pairs is anticipated in the reducers of the first job,
  * this Mapper need just to output the the key-value pairs as they are.
  */
-class MapperTopK extends Mapper<Text,Text,NullWritable,RecordCountWritable> {
+class MapperBigData2 extends Mapper<Text,Text,NullWritable,RecordCountWritable> {
 	
 	@Override
 	protected void map(Text key, Text value, Context context) 

@@ -7,11 +7,11 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 /**
- * MapReduce - Reducer
+ * MapReduce - Reducer of Job 2
  * 
  * Implementation of the top K pattern.
  */
-class ReducerTopK extends Reducer<NullWritable,RecordCountWritable,NullWritable,RecordCountWritable> {
+class ReducerBigData2 extends Reducer<NullWritable,RecordCountWritable,NullWritable,RecordCountWritable> {
 	private int k;
 	
 	@Override
