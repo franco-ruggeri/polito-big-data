@@ -8,7 +8,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 	
 public class SparkDriver {
-	static final double PERCENTAGE = 0.8;
+	private static final double PERCENTAGE = 0.8;
 	
 	public static void main(String[] args) {
 		Logger.getLogger("org").setLevel(Level.OFF);
@@ -18,7 +18,7 @@ public class SparkDriver {
 		String outputPath = args[1];
 		String prefix = args[2];
 		
-		SparkConf conf = new SparkConf().setAppName("Lab 5");
+		SparkConf conf = new SparkConf().setAppName("Lab 5 - Filter data and compute basic statistics with Spark");
 		JavaSparkContext context = new JavaSparkContext(conf);
 
 		/* Task 1 */
@@ -29,7 +29,7 @@ public class SparkDriver {
 					// double '\' because it is a regex, but a single '\' works as well
 					// see https://stackoverflow.com/questions/3762347/understanding-regex-in-java-split-t-vs-split-t-when-do-they-both-wor
 					String[] fields = line.split("\\t");
-					String word = fields[0];
+					String word = fields[0].toLowerCase();
 					
 					boolean satisfied = word.startsWith(prefix);
 					if (satisfied)
@@ -68,7 +68,7 @@ public class SparkDriver {
 				})
 				.map(line -> {
 					String[] fields =line.split("\\t");
-					String word = fields[0];
+					String word = fields[0].toLowerCase();
 					return word;
 				});
 		
