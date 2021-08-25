@@ -1,3 +1,4 @@
+# Check arguments
 if [ $# -ne 2 ]; then
 	echo "Usage: $0 filter word|bigram"
 	exit 1
