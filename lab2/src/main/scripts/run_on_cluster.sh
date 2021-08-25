@@ -15,4 +15,4 @@ hdfs dfs -put data
 hadoop jar Lab2-1.0.0.jar it.polito.bigdata.hadoop.lab2.DriverBigData data results $@
 
 # Retrieve result
-hadoop dfs -getmerge results result.txt
+hdfs dfs -getmerge results result.txt

@@ -11,4 +11,4 @@ hdfs dfs -rm -r results
 spark-submit --class it.polito.bigdata.spark.lab5.SparkDriver --deploy-mode client --master yarn Lab5-1.0.0.jar /data/students/bigdata-01QYD/Lab2/ results $@
 
 # Retrieve result
-hadoop dfs -getmerge results result.txt
+hdfs dfs -getmerge results result.txt

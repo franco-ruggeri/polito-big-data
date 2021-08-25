@@ -9,4 +9,4 @@ hdfs dfs -put data
 hadoop jar Lab3-1.0.0.jar it.polito.bigdata.hadoop.lab3.DriverBigData 2 data results/count results/top100 100
 
 # Retrieve result
-hadoop dfs -getmerge results/top100 result.txt
+hdfs dfs -getmerge results/top100 result.txt
