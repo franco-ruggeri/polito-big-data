@@ -10,10 +10,8 @@ public class DateTool {
 	public static String dayOfTheWeek(String date) throws ParseException {
 		String dayOfTheWeek;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Date d = new Date();
+		Date d = format.parse(date);
 		Calendar cal = Calendar.getInstance();
-
-		d = format.parse(date);
 		cal.setTime(d);
 
 		switch (cal.get(Calendar.DAY_OF_WEEK)) {
