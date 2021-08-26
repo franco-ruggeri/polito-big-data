@@ -7,8 +7,6 @@ import java.util.Objects;
 public class ProductPair implements Serializable {
 	private String product1, product2;
 	
-	public ProductPair() {}
-	
 	public ProductPair(String product1, String product2) {
 		// store always in order, we want to consider (p1,p2) the same as (p2,p1)
 		if (product1.compareTo(product2) <= 0) {
