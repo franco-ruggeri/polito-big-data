@@ -3,8 +3,8 @@ package it.polito.bigdata.spark.lab8;
 import java.sql.Timestamp;
 
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.UDFRegistration;
 import org.apache.spark.sql.DataFrameReader;
-import org.apache.spark.sql.DataFrameWriter;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
@@ -23,11 +23,12 @@ public class SparkDriver {
 		String outputPath = args[2];
 		double threshold = Double.parseDouble(args[3]);
 
-		SparkSession session = SparkSession.builder().appName("Spark Lab #8 - Template").getOrCreate();
+		SparkSession session = SparkSession.builder().appName("Lab 8 - Bike sharing data anlysis with Spark SQL").getOrCreate();
 
 		// UDFs
-		session.udf().register("critical", (Integer n) -> n == 0 ? 1 : 0, DataTypes.IntegerType);
-		session.udf().register("mydayofweek", (Timestamp timestamp) -> DateTool.dayOfTheWeek(timestamp), DataTypes.StringType);
+		UDFRegistration udfRegistration = session.udf();
+		udfRegistration.register("critical", (Integer n) -> n == 0 ? 1 : 0, DataTypes.IntegerType);
+		udfRegistration.register("mydayofweek", (Timestamp timestamp) -> DateTool.dayOfTheWeek(timestamp), DataTypes.StringType);
 		
 		// load datasets
 		DataFrameReader reader = session.read()
