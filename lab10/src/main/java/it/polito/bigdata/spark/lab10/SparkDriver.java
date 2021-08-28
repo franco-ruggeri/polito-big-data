@@ -11,19 +11,27 @@ import scala.Tuple2;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 	
 public class SparkDriver {
-	private static Duration WINDOW_LENGTH = Durations.seconds(30);
+	private static Duration BATCH_DURATION = Durations.seconds(10);
+	private static Duration SLIDING_DURATION = BATCH_DURATION;
+	private static Duration WINDOW_LENGTH = BATCH_DURATION.times(3);
 	private static int THRESHOLD_RELEVANCE = 100;
+	private static int TIMEOUT = 120000;
 	
 	public static void main(String[] args) throws InterruptedException {
+		Logger.getLogger("org").setLevel(Level.OFF);
+		Logger.getLogger("akka").setLevel(Level.OFF);
+		
 		String inputFolder = args[0];
 		String outputPathPrefix = args[1];
 	
 		SparkConf conf=new SparkConf().setAppName("Lab 10 - Tweet analysis with Spark Streaming");
-		JavaStreamingContext streamingContext = new JavaStreamingContext(conf, Durations.seconds(10));
-		streamingContext.checkpoint("checkpointfolder");
+		JavaStreamingContext streamingContext = new JavaStreamingContext(conf, BATCH_DURATION);
+		streamingContext.checkpoint("/tmp/spark-streaming-checkpoint");
 
 		JavaDStream<String> tweets = streamingContext.textFileStream(inputFolder);
 		
@@ -42,7 +50,7 @@ public class SparkDriver {
 					return ht.iterator();
 				})
 				// hashtag -> count
-				.reduceByKeyAndWindow((c1, c2) -> c1+c2, WINDOW_LENGTH)
+				.reduceByKeyAndWindow((c1, c2) -> c1+c2, WINDOW_LENGTH, SLIDING_DURATION)
 				// count -> hashtag
 				.mapToPair(pair -> new Tuple2<>(pair._2, pair._1))
 				// sort counts in descending order
@@ -53,13 +61,13 @@ public class SparkDriver {
 		hashtags.print();
 		
 		JavaPairDStream<Integer,String> relevantHashtags = hashtags
-				.filter(pair -> pair._1 > THRESHOLD_RELEVANCE);
+				.filter(pair -> pair._1 >= THRESHOLD_RELEVANCE);
 		
 		relevantHashtags.dstream().saveAsTextFiles(outputPathPrefix, "relevant");
 		relevantHashtags.print();
 		
 		streamingContext.start();
-		streamingContext.awaitTerminationOrTimeout(120000);
+		streamingContext.awaitTerminationOrTimeout(TIMEOUT);
 		streamingContext.close();
 	}
 }
