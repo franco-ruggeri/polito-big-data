@@ -52,8 +52,6 @@ public class DriverBigData extends Configured implements Tool {
 		job.setOutputKeyClass(NullWritable.class);
 		job.setOutputValueClass(RatingWritable.class);
 		
-		// TODO: can I optimize with combiners?
-		
 		job.setNumReduceTasks(numberOfReducers1);
 		
 		FileInputFormat.addInputPath(job, inputPath);
